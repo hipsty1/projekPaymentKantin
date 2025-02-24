@@ -7,8 +7,7 @@ using namespace std;
 int saldo = 0, pilihTopUp;
 char pilih;
 string username, password, passwordCheck;
-bool check = false;
-int kesempatannya = 3;
+
 
 // data
 // data nama stand
@@ -110,6 +109,8 @@ void tambahSaldo()
     system("pause");
     system("cls");
     //confirmasi password
+    bool check = false;
+    int kesempatannya = 3;
     while(check == false){
         system("cls");
         cout << setfill('=') << setw(40) << "=" << endl;
