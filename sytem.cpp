@@ -8,7 +8,6 @@ int saldo = 0, pilihTopUp;
 char pilih;
 string username, password, passwordCheck;
 
-
 // data
 // data nama stand
 string kantin[5] = {"Dapur Mak'E - Depok", "Kentang Kletji", "Soto Seger Boyolali - Bu Retno", "Komunitas Kantin Puspita", "Kantin 21"};
@@ -29,7 +28,7 @@ int topUp[6] = {5000, 10000, 20000, 25000, 50000, 100000};
 void login();
 void profile();
 void tambahSaldo();
-void menuKantin();
+void buy();
 void exit();
 
 int main(){
@@ -73,7 +72,7 @@ void profile(){
         break;
 
     case '2':
-        menuKantin();
+        buy();
         break;
 
     case '3':
