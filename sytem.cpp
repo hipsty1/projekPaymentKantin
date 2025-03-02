@@ -7,8 +7,7 @@ using namespace std;
 // deklarasi
 int saldo = 0;
 string namaUser, passUser;
-//int pilihTopUp;
-//string passwordCheck;
+
 
 // data
 // data user
@@ -22,7 +21,7 @@ Account account [10] = {
     {"Zen","123240061"},
     {"Deva","123240080"}};
 
-/*
+
 // data nama stand
 string kantin[5] = {"Dapur Mak'E - Depok", "Kentang Kletji", "Soto Seger Boyolali - Bu Retno", "Komunitas Kantin Puspita", "Kantin 21"};
 // data menu kantin
@@ -36,16 +35,17 @@ menu kantin3[7] = {{"Nasi Soto Ayam", 7000}, {"Lontong Opor Ayam", 13000}, {"Nas
 menu kantin4[6] = {{"Indomie Telur", 10000}, {"Nasi Rawon", 16000}, {"Nasi Ayam Geprek", 12000}, {"Rice Bowl", 11000}, {"Es Kuwut", 5000}, {"Cola", 6000}};
 menu kantin5[8] = {{"Indomie Goreng Kornet", 10000}, {"Indomie rebus Kornet", 10000}, {"Indomie Goreng Kornet Telur", 13000}, {"Indomie Rebus Kornet", 13000}, {"Indomie Goreng Kornet Sosis", 9000}, {"Indomie Rebus Kornet", 9000}, {"Es Jeruk", 3000}, {"Es Nutrisari", 4000}};
 // data menu top up
+
 int topUp[6] = {5000, 10000, 20000, 25000, 50000, 100000};
-*/
+
 // prototype
 void firstMenu();
 void signup();
 void signin();
 void profile();
-// void tambahSaldo();
-// void buy();
-// void exit();
+void tambahSaldo();
+void buy();
+
 
 int main(){
     firstMenu();
@@ -53,7 +53,7 @@ int main(){
 }
 
 void firstMenu(){
-    int pilih;
+    int pilihmenuawal;
     // tampilan awal
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
@@ -61,11 +61,11 @@ void firstMenu(){
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "1. Sign Up" << endl << "2. Sign In" << endl << "3. Out" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-    cout << "Pilih : "; cin >> pilih;
+    cout << "Pilih : "; cin >> pilihmenuawal;
     system("pause");
 
     system("cls");
-    switch(pilih){
+    switch(pilihmenuawal){
         case 1:
         signup();
         break;
@@ -167,7 +167,7 @@ void signin() {
 
 
 void profile(){
-    char pilih;
+    char pilihmenuprofile;
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(16) << " " << "PROFILE" << endl;
@@ -177,26 +177,34 @@ void profile(){
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "1. TOP UP" << endl;
     cout << "2. BUY" << endl;
-    cout << "3. LOG OUT" << endl;
+    cout << "3. SETTING" << endl;
     cout << "4. HISTORY TRANSAKSI" << endl;
-    cout << "5. SETTING" << endl;
+    cout << "5. LOG OUT" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "PILIH : ";
-    cin >> pilih;
+    cin >> pilihmenuprofile;
     cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
-    switch (pilih){
+    switch (pilihmenuprofile){
     case '1':
-        // tambahSaldo();
+        tambahSaldo();
         break;
 
     case '2':
-        // buy();
+        buy();
         break;
 
     case '3':
-        // exit(0);
+        // setting();
         break;
+    case '4': 
+        // historyTransaksi();
+        break; 
+    
+    case '5':
+        exit(0);
+        break;
+    
 
     default:
         system("cls");
@@ -209,10 +217,13 @@ void profile(){
     }
 }
 
-/*
+
 
 void tambahSaldo()
 {
+    char pilih;
+    int pilihTopUp;
+    string passwordCheck;
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(16) << " " << "TOP UP" << endl;
@@ -238,12 +249,12 @@ void tambahSaldo()
             cout << "Enter your Password : ";
             cin >> passwordCheck;
             cout << setfill('=') << setw(40) << "=" << endl;
-            if(passwordCheck==password){
+            if(passwordCheck==passUser){
                 check = true;
-            }else if(passwordCheck != password && kesempatannya > 1){
+            }else if(passwordCheck != passUser && kesempatannya > 1){
                 kesempatannya--;
-            }else if(passwordCheck != password && kesempatannya <= 1){
-                exit();
+            }else if(passwordCheck != passUser && kesempatannya <= 1){
+                exit(0);
             }
             system("pause");
         };
@@ -314,18 +325,20 @@ void tambahSaldo()
 }
 
 void buy(){
+    int pilihkantin;
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(13) << " " << "TAMPILAN MENU" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
+    cout << setfill(' ') << setw(0) << "|" << setw(4) << "1" << setw(4) << "|" << setw(4) << "2" 
+         << setw(4) << "|" << setw(4) << "3" << setw(4) << "|" << setw (4) << "4" 
+         << setw(4) << "|" << setw(4) << "5" << setw(3) << "|" << endl;
+    cout << setfill('=') << setw(40) << "=" << endl;
+    cout << "Pilih Kantin : \n";
+    for (int i = 0; i < 5; i++){
+        cout << i+1 << "." << kantin[i] << endl;
+    }
+    cout << "Pilih Kantin (1-5) : "; cin >> pilihkantin;
 }
 
-void exit(){
-    system("cls");
-    cout << setfill('=') << setw(40) << "=" << endl;
-    cout << setfill(' ') << setw(10) << "ANDA DIKELUARKAN" << endl; // PAKE B ING
-    cout << setfill('=') << setw(40) << "=" << endl;
-    exit(0);
-    
-}
-*/
+
