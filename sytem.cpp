@@ -34,6 +34,18 @@ menu kantin4[6] = {{"Indomie Telur", 10000}, {"Nasi Rawon", 16000}, {"Nasi Ayam 
 menu kantin5[8] = {{"Indomie Goreng Kornet", 10000}, {"Indomie rebus Kornet", 10000}, {"Indomie Goreng Kornet Telur", 13000}, {"Indomie Rebus Kornet", 13000}, {"Indomie Goreng Kornet Sosis", 9000}, {"Indomie Rebus Kornet", 9000}, {"Es Jeruk", 3000}, {"Es Nutrisari", 4000}};
 // data menu top up
 
+// data menu history
+struct history
+{
+    bool sejarah; // 0 topup, 1 transaksi
+    int keuangan; // nominalnya
+};
+
+int j = 0;
+int batas = 0;
+const int N = 1000;
+history transaksi[N];
+
 // data nama stand
 string kantin[5] = {"     Dapur Mak'E - Depok      ", "        Kentang Kletji        ", "     Soto Seger Boyolali      ", "   Komunitas Kantin Puspita   ", "           Kantin 21          "};
 
@@ -46,6 +58,7 @@ void signin();
 void profile();
 void tambahSaldo();
 void buy();
+void detailHistory();
 int bayar(int a, int b);
 int totalHarga(int a, int b);
 bool konfirmasiPassword();
@@ -223,6 +236,7 @@ void profile()
         // setting();
         break;
     case '4':
+        detailHistory();
         // historyTransaksi();
         break;
 
@@ -304,6 +318,9 @@ void tambahSaldo()
             cout << setfill(' ') << setw(12) << " " << "TOPUP SUCCESSED" << endl;
             nominal = topUp[pilihTopUp - 1];
             saldo += nominal;
+            transaksi[j].sejarah = 0;
+            transaksi[j].keuangan = nominal;
+            j++;
             cout << "Nominal        : " << nominal << endl;
             cout << "Saldo saat ini : " << saldo << endl;
         }
@@ -344,7 +361,7 @@ void tambahSaldo()
 int pilihKantin, pilihmenu;
 void buy()
 {
-    int  qty;
+    int qty;
     char ulang;
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
@@ -505,9 +522,9 @@ int totalHarga(int a, int b)
 int bayar(int a, int b)
 {
 
-    if (saldo < harga)
+    if (saldo < total)
     {
-        cout << "Saldo anda tidak cukup";
+        cout << "Saldo anda tidak cukup" << endl;
         return 0;
     }
     else
@@ -519,23 +536,45 @@ int bayar(int a, int b)
             cout << setfill('=') << setw(11) << " " << "PAYMENT CANCELED" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
             system("pause");
-            
         }
         else
         {
             system("cls");
-            saldo -= harga;
+            saldo -= total;
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << setfill(' ') << setw(11) << " " << "PAYMENT SUCCESED" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << "Total harga : " << total << endl;
-            cout << "Saldo anda  : " << saldo << endl << endl;
+            cout << "Saldo anda  : " << saldo << endl
+                 << endl;
+            transaksi[j].sejarah = 1;
+            transaksi[j].keuangan = total;
+            j++;
             cout << setfill(' ') << setw(5) << " " << "Terimakasih telah berbelanja" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
             system("pause");
         }
     }
+    
     total = 0;
     harga = 0;
     profile();
 }
+
+void detailHistory()
+{
+    cout << setfill('=') << setw(40) << "=" << endl;
+    cout << "HISTORI TRANSAKSI\n";
+    cout << setfill('=') << setw(40) << "=" << endl;
+    for (int k = 0; k < j; k++)
+    {
+        if (transaksi[k].sejarah == 0)
+        {
+            cout <<"|" << endl << "*  Pemasukan          +" << transaksi[k].keuangan << endl;
+        }
+        if (transaksi[k].sejarah == 1)
+        {
+            cout <<"|" << endl << "*  Pengeluaran        -" << transaksi[k].keuangan << endl ;
+        }
+    }
+};
