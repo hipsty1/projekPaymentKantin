@@ -6,10 +6,11 @@ using namespace std;
 int pilihKantin, pilihmenu; // menyimpan suatu alamat nilaiinput pilih untuk dijadikan histoey
 int total = 0;              // total harga awal sebelum user membeli menu
 int harga;                  // deklarasi untuk fungsi pembayaran
-int saldo = 0 ;             // saldo awal user
+int saldo = 0;              // saldo awal user
 string namaUser, passUser;  // menyimpan data nama dan pass user
 // data user
-struct Account{
+struct Account
+{
     string username;
     string password;
 };
@@ -31,7 +32,8 @@ menu kantin3[7] = {{"Nasi Soto Ayam", 7000}, {"Lontong Opor Ayam", 13000}, {"Nas
 menu kantin4[6] = {{"Indomie Telur", 10000}, {"Nasi Rawon", 16000}, {"Nasi Ayam Geprek", 12000}, {"Rice Bowl", 11000}, {"Es Kuwut", 5000}, {"Cola", 6000}};
 menu kantin5[8] = {{"Indomie Goreng Kornet", 10000}, {"Indomie rebus Kornet", 10000}, {"Indomie Goreng Kornet Telur", 13000}, {"Indomie Rebus Kornet", 13000}, {"Indomie Goreng Kornet Sosis", 9000}, {"Indomie Rebus Kornet", 9000}, {"Es Jeruk", 3000}, {"Es Nutrisari", 4000}};
 // data menu history
-struct history{
+struct history
+{
     bool sejarah; // 0 topup, 1 transaksi
     int keuangan; // nominalnya
 };
@@ -39,6 +41,7 @@ int j = 0;
 int batas = 0;
 const int N = 1000;   // konstanta untuk menetapkan jumlah histpry yang ditampung
 history transaksi[N]; // data untuk menyimpan history transaksi
+
 // data nama stand
 string kantin[5] = {"     Dapur Mak'E - Depok      ", "        Kentang Kletji        ", "     Soto Seger Boyolali      ", "   Komunitas Kantin Puspita   ", "           Kantin 21          "};
 // data menu top up
@@ -55,13 +58,16 @@ void detailHistory();
 int bayar(int a, int b);
 int totalHarga(int a, int b);
 bool konfirmasiPassword();
+void sortingAsc(int first, int last);
 // menjalankan program
-int main(){
+int main()
+{
     homePage();
     return 0;
 }
 // fungsi untuk menu
-void homePage(){
+void homePage()
+{
     int pilihmenuawal;
     // tampilan awal
     system("cls");
@@ -77,7 +83,8 @@ void homePage(){
     system("pause");
     // pengondisian setelah input pilih menu
     system("cls");
-    switch (pilihmenuawal){
+    switch (pilihmenuawal)
+    {
     case 1:
         signup();
         break;
@@ -92,7 +99,8 @@ void homePage(){
     }
 }
 // menu sig up (daftar account)
-void signup(){
+void signup()
+{
     // tampilan awal menu sign up
     Account newAccount;
     cout << setfill('=') << setw(40) << "=" << endl;
@@ -103,8 +111,10 @@ void signup(){
     cout << "Masukkan Password (gunakan NIM) : ";
     cin >> newAccount.password;
     // Cek apakah username sudah ada
-    for (int i = 0; i < 10; i++){
-        if (account[i].username == newAccount.username){
+    for (int i = 0; i < 10; i++)
+    {
+        if (account[i].username == newAccount.username)
+        {
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << "Username sudah digunakan. Coba lagi." << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
@@ -113,8 +123,10 @@ void signup(){
         }
     }
     // Menyimpan akun baru ke dalam array jika masih ada slot kosong
-    for (int i = 0; i < 10; i++){
-        if (account[i].username.empty()){
+    for (int i = 0; i < 10; i++)
+    {
+        if (account[i].username.empty())
+        {
             account[i] = newAccount;
             namaUser = newAccount.username;
             passUser = newAccount.password;
@@ -134,7 +146,8 @@ void signup(){
     homePage();
 }
 // menu sign in
-void signin(){
+void signin()
+{
     string username, password;
     bool cek = false; // Menyimpan status login berhasil/gagal
     // tampilan awal menu sign in
@@ -148,23 +161,28 @@ void signin(){
     cout << setfill('=') << setw(40) << "=" << endl;
     // cek apakah user terdaftar
     int jumlahAkun = sizeof(account) / sizeof(account[0]);
-    for (int i = 0; i < jumlahAkun; i++){
-        if (account[i].username == username && account[i].password == password){
+    for (int i = 0; i < jumlahAkun; i++)
+    {
+        if (account[i].username == username && account[i].password == password)
+        {
             cek = true;
             break; // Keluar dari loop jika sudah ditemukan akun yang cocok
         }
     }
     // tampilan menu setelah cek apakah akun tersedia atau tidak
-    if (cek){
-        namaUser = username;    // mengoper nama agar bisa digunakan secara global
-        passUser = password;    // mengoper pass agar bisa digunakan secara global
+    if (cek)
+    {
+        namaUser = username; // mengoper nama agar bisa digunakan secara global
+        passUser = password; // mengoper pass agar bisa digunakan secara global
         system("cls");
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << setfill(' ') << setw(14) << " " << "SIGN IN SUCCESS" << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         system("pause");
         profile(); // Masuk ke menu profile setelah login berhasil
-    }else{
+    }
+    else
+    {
         system("cls");
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << setfill(' ') << setw(14) << " " << "SIGN IN FAILED" << endl;
@@ -174,7 +192,8 @@ void signin(){
     }
 }
 // menu profile user
-void profile(){
+void profile()
+{
     char pilihmenuprofile;
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
@@ -193,7 +212,8 @@ void profile(){
     cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
     // kondisi ketika input menu
-    switch (pilihmenuprofile){
+    switch (pilihmenuprofile)
+    {
     case '1':
         tambahSaldo();
         break;
@@ -217,12 +237,16 @@ void profile(){
     }
 }
 // fungsi konfirmasi password ketika membeli
-bool konfirmasiPassword(int kesempatan){
+bool konfirmasiPassword(int kesempatan)
+{
     string passwordCheck;
-    if (kesempatan <= 0){
+    if (kesempatan <= 0)
+    {
         cout << "Batas percobaan habis" << endl;
         return false;
-    }else{
+    }
+    else
+    {
         system("cls");
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << setfill(' ') << setw(9) << " " << "KONFIRMASI PEMBAYARAN" << endl;
@@ -232,24 +256,29 @@ bool konfirmasiPassword(int kesempatan){
         cout << setfill('=') << setw(40) << "=" << endl;
     }
     // cek password yang diinput dengan password user
-    if (passwordCheck == passUser){
+    if (passwordCheck == passUser)
+    {
         return true;
-    }else{
+    }
+    else
+    {
         cout << "Password salah!" << endl;
         system("pause");
         return konfirmasiPassword(kesempatan - 1);
     }
 }
 // fungsi menambahkan saldo
-void tambahSaldo(){
+void tambahSaldo()
+{
     char pilih;
     int pilihTopUp, nominal, kesempatan = 3;
-    //menampilkan menu top up
+    // menampilkan menu top up
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(16) << " " << "TOP UP" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-    for (int i = 0; i < 6; i++) cout << i + 1 << ". " << topUp[i] << endl;
+    for (int i = 0; i < 6; i++)
+        cout << i + 1 << ". " << topUp[i] << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "Pilih Jumlah TopUp : ";
     cin >> pilihTopUp;
@@ -257,10 +286,14 @@ void tambahSaldo(){
     system("pause");
     // operasi dan konfirmasi top up
     system("cls");
-    if (1 <= pilihTopUp && pilihTopUp <= 6){
-        if (!konfirmasiPassword(kesempatan)){
+    if (1 <= pilihTopUp && pilihTopUp <= 6)
+    {
+        if (!konfirmasiPassword(kesempatan))
+        {
             tambahSaldo();
-        }else{
+        }
+        else
+        {
             system("cls");
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << setfill(' ') << setw(12) << " " << "TOPUP SUCCESSED" << endl;
@@ -272,7 +305,9 @@ void tambahSaldo(){
             cout << "Nominal        : " << nominal << endl;
             cout << "Saldo saat ini : " << saldo << endl;
         }
-    }else{
+    }
+    else
+    {
         system("cls");
         cout << setfill('=') << setw(40) << " " << endl;
         cout << setfill(' ') << setw(9) << " " << "PILIHAN TIDAK TERSEDIA" << endl;
@@ -282,13 +317,18 @@ void tambahSaldo(){
     system("pause");
     // konfirmasi untuk top up berulang
     cout << setfill('=') << setw(40) << " " << endl;
-    cout << "Apakah anda ingin TopUp? (y/n) : ";
+    cout << "Ingin TopUp kembali? (y/n) : ";
     cin >> pilih;
-    if (pilih == 'y' || pilih == 'Y'){
+    if (pilih == 'y' || pilih == 'Y')
+    {
         tambahSaldo();
-    }else if(pilih == 'n' || pilih == 'N'){
+    }
+    else if (pilih == 'n' || pilih == 'N')
+    {
         profile();
-    }else{
+    }
+    else
+    {
         cout << "INPUT SALAH" << endl;
         system("pause");
         tambahSaldo();
@@ -297,7 +337,8 @@ void tambahSaldo(){
     system("pause");
 }
 // fungsi menu pembelian
-void buy(){
+void buy()
+{
     int qty;
     char ulang;
     // tampilan daftar kantin
@@ -305,7 +346,8 @@ void buy(){
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(17) << " " << "PILIH KANTIN" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-    for (int i = 0; i < 5; i++) cout << "|  " << i + 1 << "  |" << setfill(' ') << setw(30) << kantin[i] << "  |" << endl;
+    for (int i = 0; i < 5; i++)
+        cout << "|  " << i + 1 << "  |" << setfill(' ') << setw(30) << kantin[i] << "  |" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "Pilih Kantin   : ";
     cin.ignore();
@@ -315,9 +357,11 @@ void buy(){
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(5) << " " << kantin[pilihKantin - 1] << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-    switch (pilihKantin){
+    switch (pilihKantin)
+    {
     case 1:
-        for (int i = 0; i < 8; i++) cout << i + 1 << ". " << kantin1[i].namaMkn << " - Rp." << kantin1[i].harga << endl;
+        for (int i = 0; i < 8; i++)
+            cout << i + 1 << ". " << kantin1[i].namaMkn << " - Rp." << kantin1[i].harga << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << "Pilih Menu : ";
         cin >> pilihmenu;
@@ -328,7 +372,8 @@ void buy(){
         cout << setfill('=') << setw(40) << "=" << endl;
         break;
     case 2:
-        for (int i = 0; i < 5; i++) cout << i + 1 << ". " << kantin2[i].namaMkn << " - Rp." << kantin2[i].harga << endl;
+        for (int i = 0; i < 5; i++)
+            cout << i + 1 << ". " << kantin2[i].namaMkn << " - Rp." << kantin2[i].harga << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << "Pilih Menu : ";
         cin >> pilihmenu;
@@ -339,7 +384,8 @@ void buy(){
         cout << setfill('=') << setw(40) << "=" << endl;
         break;
     case 3:
-        for (int i = 0; i < 7; i++) cout << i + 1 << ". " << kantin3[i].namaMkn << " - Rp." << kantin3[i].harga << endl;
+        for (int i = 0; i < 7; i++)
+            cout << i + 1 << ". " << kantin3[i].namaMkn << " - Rp." << kantin3[i].harga << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << "Pilih Menu : ";
         cin >> pilihmenu;
@@ -351,7 +397,8 @@ void buy(){
         break;
 
     case 4:
-        for (int i = 0; i < 6; i++) cout << i + 1 << ". " << kantin4[i].namaMkn << " - Rp." << kantin4[i].harga << endl;
+        for (int i = 0; i < 6; i++)
+            cout << i + 1 << ". " << kantin4[i].namaMkn << " - Rp." << kantin4[i].harga << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << "Pilih Menu : ";
         cin >> pilihmenu;
@@ -363,7 +410,8 @@ void buy(){
         break;
 
     case 5:
-        for (int i = 0; i < 8; i++) cout << i + 1 << ". " << kantin5[i].namaMkn << " - Rp." << kantin5[i].harga << endl;
+        for (int i = 0; i < 8; i++)
+            cout << i + 1 << ". " << kantin5[i].namaMkn << " - Rp." << kantin5[i].harga << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         cout << "Pilih Menu : ";
         cin >> pilihmenu;
@@ -384,16 +432,21 @@ void buy(){
     // konfirmasi tambah pesanan
     cout << "ingin menambahkan lagi? (y/n) : ";
     cin >> ulang;
-    if (ulang == 'y' || ulang == 'Y'){
+    if (ulang == 'y' || ulang == 'Y')
+    {
         buy();
-    }else{
+    }
+    else
+    {
         bayar(pilihmenu, qty);
     }
 }
 // fungsi menghitung jumlah harga yang harus dibayar
-int totalHarga(int a, int b){
+int totalHarga(int a, int b)
+{
     // operasi tiap tiap kantin
-    switch (pilihKantin){
+    switch (pilihKantin)
+    {
     case 1:
         harga = kantin1[a - 1].harga * b;
         total += harga;
@@ -428,20 +481,27 @@ int totalHarga(int a, int b){
     return total;
 }
 // fungsi untuk pembayaran user
-int bayar(int a, int b){
+int bayar(int a, int b)
+{
     // cek sisa saldo dan harga yang harus dibayar user
-    if (saldo < total){
+    if (saldo < total)
+    {
         cout << "Saldo anda tidak cukup" << endl;
         return 0;
-    }else{
+    }
+    else
+    {
         // konfirmasi pembayaran user menggunakan password
-        if (!konfirmasiPassword(3)){
+        if (!konfirmasiPassword(3))
+        {
             system("cls");
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << setfill('=') << setw(11) << " " << "PAYMENT CANCELED" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
             system("pause");
-        }else{
+        }
+        else
+        {
             system("cls");
             saldo -= total;
             cout << setfill('=') << setw(40) << "=" << endl;
@@ -464,14 +524,84 @@ int bayar(int a, int b){
     profile();
 }
 // menu history top up dan pembayaran user
-void detailHistory(){
+void detailHistory()
+{
+    int a, b;
+    char pilihHistory;
+    system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
-    cout << "HISTORI TRANSAKSI\n";
+    cout << setfill(' ') << setw(11) << " " << "HISTORI TRANSAKSI\n";
     cout << setfill('=') << setw(40) << "=" << endl;
-    for (int k = 0; k < j; k++){
-        if (transaksi[k].sejarah == 0) cout <<"|" << endl << "*  Pemasukan          +" << transaksi[k].keuangan << endl;
-        if (transaksi[k].sejarah == 1) cout <<"|" << endl << "*  Pengeluaran        -" << transaksi[k].keuangan << endl ;
+    cout << "1. History \n";
+    cout << "2. History Ascending\n";
+    cout << "3. History Descending\n";
+    cout << setfill('=') << setw(40) << "=" << endl;
+    cout << "Pilih urutan: ";
+    cin >> pilihHistory;
+    cout << setfill('=') << setw(40) << "=" << endl;
+    switch (pilihHistory)
+    {
+        case '1':
+        for (int k = 0; k < j; k++)
+        {
+            if (transaksi[k].sejarah == 0)
+            cout << "|" << endl
+            << "*  Pemasukan          +" << transaksi[k].keuangan << endl;
+            if (transaksi[k].sejarah == 1)
+            cout << "|" << endl
+            << "*  Pengeluaran        -" << transaksi[k].keuangan << endl;
+        }
+        break;
+        case '2':
+        a = 0;
+        b = j;
+        sortingAsc(a, b);
+        for (int k = 0; k < j; k++)
+        {
+            if (transaksi[k].sejarah == 0)
+            cout << "|" << endl
+                     << "*  Pemasukan          +" << transaksi[k].keuangan << endl;
+                     if (transaksi[k].sejarah == 1)
+                     cout << "|" << endl
+                     << "*  Pengeluaran        -" << transaksi[k].keuangan << endl;
+                    }
+                    break;
+                    
+    default:
+        break;
     }
+    cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
     profile();
 };
+//urut kecil ke besar
+void sortingAsc(int first, int last)
+{
+
+    int low, high, mid, temp;
+    low = first;
+    high = last;
+    mid = transaksi[(first + last) / 2].keuangan;
+
+    do
+    {
+        while (transaksi[low].keuangan < mid)
+            low++;
+        while (transaksi[high].keuangan > mid)
+            high--;
+
+        if (low <= high)
+        {
+            temp = transaksi[low].keuangan;
+            transaksi[low].keuangan = transaksi[high].keuangan;
+            transaksi[high].keuangan = temp;
+            low++;
+            high--;
+        }
+    } while (low <= high);
+
+    if (first < high)
+        sortingAsc(first, high);
+    if (low < last)
+        sortingAsc(low, last);
+}
