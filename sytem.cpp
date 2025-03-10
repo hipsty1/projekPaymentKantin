@@ -527,14 +527,14 @@ int bayar(int a, int b)
 void detailHistory()
 {
     int a, b;
-    char pilihHistory;
+    char pilihHistory;      
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(11) << " " << "HISTORI TRANSAKSI\n";
     cout << setfill('=') << setw(40) << "=" << endl;
-    cout << "1. History \n";
-    cout << "2. History Ascending\n";
-    cout << "3. History Descending\n";
+    cout << "1. Seluruh History \n";
+    cout << "2. History Nominal (Terkecil)\n";
+    cout << "3. History Nominal (Terbesar)\n";
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "Pilih urutan: ";
     cin >> pilihHistory;
