@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 #include <string>
 using namespace std;
 // deklarasi global
@@ -133,6 +134,11 @@ void signup()
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << "Akun berhasil dibuat!" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
+            ofstream file("account.txt", ios::app);
+            if(file.is_open()){
+                file << setfill(' ') << left << setw(20) << namaUser << " " << setw(20) << passUser << endl;
+                file.close();
+            }
             system("pause");
             profile();
             return;
