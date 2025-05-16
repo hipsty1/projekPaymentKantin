@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 using namespace std;
+
 // deklarasi global
 int pilihKantin, pilihmenu; // menyimpan suatu alamat nilaiinput pilih untuk dijadikan histoey
 int total = 0;              // total harga awal sebelum user membeli menu
@@ -19,7 +20,8 @@ Account account[10] = {
     {"Hendri", "123240066"},
     {"Restu", "123240050"},
     {"Zen", "123240061"},
-    {"Deva", "123240080"}};
+    {"Deva", "123240080"}
+};
 
 // data menu kantin
 struct menu
@@ -99,11 +101,29 @@ void homePage()
         homePage();
     }
 }
+
+
+bool checkAcc(string newUsername){
+    bool check=false;
+    ifstream file("dataAccount.txt");
+    if (file.is_open()){
+        while (file >> namaUser >> passUser){
+            if(namaUser == newUsername){
+                check = true;
+            }
+        }
+    }else{
+        check = false;
+    }
+    return check;
+    
+} 
+
 // menu sig up (daftar account)
 void signup()
 {
-    // tampilan awal menu sign up
     Account newAccount;
+    // tampilan awal menu sign up
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(17) << " " << "SIGNUP" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
@@ -112,6 +132,7 @@ void signup()
     cout << "Masukkan Password (gunakan NIM) : ";
     cin >> newAccount.password;
     // Cek apakah username sudah ada
+    // checkAcc(newAccount.username);
     for (int i = 0; i < 10; i++)
     {
         if (account[i].username == newAccount.username)
@@ -134,7 +155,7 @@ void signup()
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << "Akun berhasil dibuat!" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
-            ofstream file("account.txt", ios::app);
+            ofstream file("dataAccount.txt", ios::app);
             if(file.is_open()){
                 file << setfill(' ') << left << setw(20) << namaUser << " " << setw(20) << passUser << endl;
                 file.close();
