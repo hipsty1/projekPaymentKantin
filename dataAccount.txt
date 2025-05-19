@@ -1,6 +1,3 @@
-Hendri               123240066           
-Restu                123240050           
-Zen                  123240061           
-Deva                 123240080           
-           
-Hendri               123                 
+hen,top up,100000
+hen,pengeluaran,8000
+hen,pengeluaran,13000

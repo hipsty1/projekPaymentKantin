@@ -1,0 +1,40 @@
+| No  | Nama Menu                     | Harga    |
+|-----|-------------------------------|----------|
+| 1   | Nasi Ayam Penyet              | .Rp13000 |
+| 2   | Nasi Ayam Crispy              | .Rp13000 |
+| 3   | Nasi Lele                     | .Rp11000 |
+| 4   | Nasi Telur                    | .Rp8000  |
+| 5   | Nasi Tempe Tahu               | .Rp7000  |
+| 6   | Nasi Ati Ampela               | .Rp10000 |
+| 7   | Nasi Kulit                    | .Rp12000 |
+| 8   | Jus Buah                      | .Rp8000  |
+--------------------------------------------------
+| 1   | Dimsum Rame-rame              | .Rp30000 |
+| 2   | Dimsum Keju                   | .Rp20000 |
+| 3   | Dimsum Original               | .Rp15000 |
+| 4   | Tori Katsu Chiizu Rice        | .Rp23000 |
+| 5   | Dimsum Mayo                   | .Rp20000 |
+--------------------------------------------------
+| 1   | Nasi Soto Ayam                | .Rp7000  |
+| 2   | Lontong Opor Ayam             | .Rp13000 |
+| 3   | Nasi Rames Telur              | .Rp11000 |
+| 4   | Nasi Pecel Lele               | .Rp11000 |
+| 5   | Nasi Rames Lele               | .Rp11000 |
+| 6   | Es Teh                        | .Rp3000  |
+| 7   | Es Lemon Tea                  | .Rp4000  |
+--------------------------------------------------
+| 1   | Indomie Telur                 | .Rp10000 |
+| 2   | Nasi Rawon                    | .Rp16000 |
+| 3   | Nasi Ayam Geprek              | .Rp12000 |
+| 4   | Rice Bowl                     | .Rp11000 |
+| 5   | Es Kuwut                      | .Rp5000  |
+| 6   | Cola                          | .Rp6000  |
+--------------------------------------------------
+| 1   | Indomie Goreng Kornet         | .Rp10000 |
+| 2   | Indomie Rebus Kornet          | .Rp10000 |
+| 3   | Indomie Goreng Kornet Telur   | .Rp13000 |
+| 4   | Indomie Rebus Kornet          | .Rp13000 |
+| 5   | Indomie Goreng Kornet Sosis   | .Rp9000  |
+| 6   | Indomie Rebus Kornet          | .Rp9000  |
+| 7   | Es Jeruk                      | .Rp3000  |
+| 8   | Es Nutrisari                  | .Rp4000  |
