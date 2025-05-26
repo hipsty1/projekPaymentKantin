@@ -1,0 +1,7 @@
+1 Nasi_Soto_Ayam 7000
+2 Lontong_Opor_Ayam 13000
+3 Nasi_Rames_Telur 11000
+4 Nasi_Pecel_Lele 11000
+5 Nasi_Rames_Lele 11000
+6 Es_Teh 3000
+7 Es_Lemon_Tea 4000

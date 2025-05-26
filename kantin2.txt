@@ -1,0 +1,5 @@
+1 Dimsum_Rame-rame 30000
+2 Dimsum_keju 20000
+3 Dimsum_Original 15000
+4 Tori_Katsu_Chiizu_Rice 23000
+5 Dimsum_Mayo 20000

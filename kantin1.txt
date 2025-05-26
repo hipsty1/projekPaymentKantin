@@ -1,0 +1,8 @@
+1 Nasi_Ayam_Penyet 13000
+2 Nasi_Ayam_Crispy 13000
+3 Nasi_Lele 11000
+4 Nasi_Telur 8000
+5 Nasi_Tempe_Tahu 7000
+6 Nasi_Ati_Ampela 10000
+7 Nasi_Kulit 12000
+8 Jus_Buah 8000

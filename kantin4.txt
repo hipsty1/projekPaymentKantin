@@ -1,0 +1,6 @@
+1 Indomie_Telur 10000
+2 Nasi_Rawon 16000
+3 Nasi_Ayam_Geprek 12000
+4 Rice_Bowl 11000
+5 Es_Kuwut 5000
+6 Cola 6000

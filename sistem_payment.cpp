@@ -9,23 +9,21 @@ int pilihKantin, pilihmenu; // menyimpan suatu alamat nilaiinput pilih untuk dij
 int total = 0;              // total harga awal sebelum user membeli menu
 int harga;                  // deklarasi untuk fungsi pembayaran
 int saldo = 0;              // saldo awal user
- // menyimpan data nama dan pass user
-string namaUser, passUser;
-// data user
+string nama_now, pass_now;  // menyimpan data nama dan pass user
+
 struct Account
 {
     string username;
     string password;
     int saldo;
 };
-Account account[1000];
-// Account account[10] = {
-//     {"Hendri", "123240066"},
-//     {"Restu", "123240050"},
-//     {"Zen", "123240061"},
-//     {"Deva", "123240080"}};
+Account account[10] = {
+    {"Hendri", "123240066"},
+    {"Restu", "123240050"},
+    {"Zen", "123240061"},
+    {"Deva", "123240080"}};
 
-// data menu kantin
+Account akun[1000];
 struct menu
 {
     string namaMkn;
@@ -48,7 +46,12 @@ const int N = 1000;   // konstanta untuk menetapkan jumlah history yang ditampun
 history transaksi[N]; // data untuk menyimpan history transaksi
 
 // data nama stand
-string kantin[5] = {"     Dapur Mak'E - Depok      ", "        Kentang Kletji        ", "     Soto Seger Boyolali      ", "   Komunitas Kantin Puspita   ", "           Kantin 21          "};
+string kantin[5] = {
+    "     Dapur Mak'E - Depok      ",
+    "        Kentang Kletji        ",
+    "     Soto Seger Boyolali      ",
+    "   Komunitas Kantin Puspita   ",
+    "           Kantin 21          "};
 // data menu top up
 int topUp[6] = {5000, 10000, 20000, 25000, 50000, 100000};
 
@@ -64,17 +67,44 @@ int bayar(int a, int b);
 int totalHarga(int a, int b);
 bool konfirmasiPassword();
 void sortingAsc(int first, int last);
-// menjalankan program
+void banyakAcc();
+void lowerCase(string &kata);
+int banyak_acc = 0;
+int indeks = 0;
+
+void banyakAcc()
+{
+    string username, pass;
+    int saldo;
+    banyak_acc = 0;
+    ifstream data("Acc.txt");
+    if (data.is_open())
+    {
+        while (data >> username >> pass >> saldo)
+        {
+            akun[banyak_acc].username = username;
+            akun[banyak_acc].password = pass;
+            akun[banyak_acc].saldo = saldo;
+            banyak_acc++;
+        }
+        data.close();
+    }
+    else
+    {
+        cout << "File error" << endl;
+    }
+}
+
 int main()
 {
     homePage();
     return 0;
 }
-// fungsi untuk menu
+
 void homePage()
 {
     int pilihmenuawal;
-    // tampilan awal
+
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(15) << " " << "MENU AWAL" << endl;
@@ -86,14 +116,15 @@ void homePage()
     cout << "Pilih : ";
     cin >> pilihmenuawal;
     system("pause");
-    // pengondisian setelah input pilih menu
     system("cls");
     switch (pilihmenuawal)
     {
     case 1:
+        banyakAcc();
         signup();
         break;
     case 2:
+        banyakAcc();
         signin();
         break;
     case 3:
@@ -107,12 +138,12 @@ void homePage()
 // bool checkAcc(string newUsername)
 // {
 //     bool check = false;
-//     ifstream file("dataAcc.txt");
+//     ifstream file("Acc.txt");
 //     if (file.is_open())
 //     {
-//         while (file >> namaUser >> passUser)
+//         while (file >> nama_now >> pass_now)
 //         {
-//             if (namaUser == newUsername)
+//             if (nama_now == newUsername)
 //             {
 //                 check = true;
 //             }
@@ -124,64 +155,74 @@ void homePage()
 //     }
 //     return check;
 // }
+// void inputData(string username, string password, int saldo){
 
-// menu sig up (daftar account)
-void banyakAcc(){
-
-}
+// }
 
 void signup()
 {
-    Account newAccount;
-    // tampilan awal menu sign up
+    string username, pass;
+    bool found = false;
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(17) << " " << "SIGNUP" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "Masukkan Username (tanpa spasi) : ";
-    cin >> newAccount.username;
+    cin >> username;
+    lowerCase(username);
     cout << "Masukkan Password (gunakan NIM) : ";
-    cin >> newAccount.password;
-    // Cek apakah username sudah ada
-    // checkAcc(newAccount.username);
-    for (int i = 0; i < 10; i++)
+    cin >> pass;
+
+    for (int i = 0; i < banyak_acc; i++)
     {
-        if (account[i].username == newAccount.username)
+        if (akun[i].username == username)
         {
             cout << setfill('=') << setw(40) << "=" << endl;
-            cout << "Username sudah digunakan. Coba lagi." << endl;
+            cout << "Username sudah digunakan. Coba lagi" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
             system("pause");
-            return signup();
+            found = true;
+            return homePage();
         }
     }
     // Menyimpan akun baru ke dalam array jika masih ada slot kosong
-    for (int i = 0; i < 10; i++)
+    if (!found)
     {
-        if (account[i].username.empty())
+        akun[banyak_acc].username = username;
+        akun[banyak_acc].password = pass;
+        akun[banyak_acc].saldo = 0;
+        banyak_acc++;
+        cout << setfill('=') << setw(40) << "=" << endl;
+        cout << "Akun berhasil dibuat!" << endl;
+        cout << setfill('=') << setw(40) << "=" << endl;
+        ofstream file("Acc.txt", ios::app);
+        if (file.is_open())
         {
-            account[i] = newAccount;
-            namaUser = newAccount.username;
-            passUser = newAccount.password;
-            cout << setfill('=') << setw(40) << "=" << endl;
-            cout << "Akun berhasil dibuat!" << endl;
-            cout << setfill('=') << setw(40) << "=" << endl;
-            ofstream file("dataAcc.txt", ios::app);
-            if (file.is_open())
-            {
-                file << namaUser << " " << passUser << " " << account[i].saldo << endl;
-                file.close();
-            }
-            system("pause");
-            profile();
-            return;
+            file << username << " " << pass << " " << akun[banyak_acc].saldo << endl;
+            file.close();
+        }
+        system("pause");
+        homePage();
+    }
+    // // jika slot akun penuh
+    // cout << setfill('=') << setw(40) << "=" << endl;
+    // cout << "Pendaftaran gagal! Kapasitas akun penuh." << endl;
+    // cout << setfill('=') << setw(40) << "=" << endl;
+    homePage();
+}
+
+void lowerCase(string &kata)
+{
+    if (kata.length() == 0)
+    {
+        return;
+    }
+    for (int i = 0; i < kata.length(); i++)
+    {
+        if (kata[i] >= 'A' && kata[i] <= 'Z')
+        {
+            kata[i] = kata[i] + 32;
         }
     }
-    // jika slot akun penuh
-    cout << setfill('=') << setw(40) << "=" << endl;
-    cout << "Pendaftaran gagal! Kapasitas akun penuh." << endl;
-    cout << setfill('=') << setw(40) << "=" << endl;
-    system("pause");
-    homePage();
 }
 // menu sign in
 void signin()
@@ -194,27 +235,28 @@ void signin()
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "Masukkan Username : ";
     cin >> username;
+    lowerCase(username);
     cout << "Masukkan Password : ";
     cin >> password;
     cout << setfill('=') << setw(40) << "=" << endl;
     // cek apakah user terdaftar
-    int jumlahAkun = sizeof(account) / sizeof(account[0]);
-    for (int i = 0; i < jumlahAkun; i++)
+    for (int i = 0; i < banyak_acc; i++)
     {
-        if (account[i].username == username && account[i].password == password)
+        if (akun[i].username == username && akun[i].password == password)
         {
             cek = true;
+            nama_now = username; // mengoper pass agar bisa digunakan secara global
+            pass_now = password; // mengoper nama agar bisa digunakan secara global
+            indeks = i;
             break; // Keluar dari loop jika sudah ditemukan akun yang cocok
         }
     }
     // tampilan menu setelah cek apakah akun tersedia atau tidak
     if (cek)
     {
-        namaUser = username; // mengoper nama agar bisa digunakan secara global
-        passUser = password; // mengoper pass agar bisa digunakan secara global
         system("cls");
         cout << setfill('=') << setw(40) << "=" << endl;
-        cout << setfill(' ') << setw(14) << " " << "SIGN IN SUCCESS" << endl;
+        cout << setfill(' ') << setw(14) << "SIGN IN SUCCESS" << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         system("pause");
         profile(); // Masuk ke menu profile setelah login berhasil
@@ -223,7 +265,7 @@ void signin()
     {
         system("cls");
         cout << setfill('=') << setw(40) << "=" << endl;
-        cout << setfill(' ') << setw(14) << " " << "SIGN IN FAILED" << endl;
+        cout << setfill(' ') << setw(14) << "SIGN IN FAILED" << endl;
         cout << setfill('=') << setw(40) << "=" << endl;
         system("pause");
         homePage(); // Meminta user kembali ke homepage jika gagal
@@ -237,15 +279,15 @@ void profile()
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(16) << " " << "PROFILE" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-    cout << "NAME\t: " << namaUser << endl;
-    cout << "SALDO\t: " << saldo << endl;
+    cout << "Nama   : " << nama_now << endl;
+    cout << "Saldo  : " << akun[indeks].saldo << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "1. TOP UP" << endl;
     cout << "2. BUY" << endl;
     cout << "3. HISTORY TRANSAKSI" << endl;
     cout << "4. LOG OUT" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-    cout << "PILIH : ";
+    cout << "Pilih : ";
     cin >> pilihmenuprofile;
     cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
@@ -294,7 +336,7 @@ bool konfirmasiPassword(int kesempatan)
         cout << setfill('=') << setw(40) << "=" << endl;
     }
     // cek password yang diinput dengan password user
-    if (passwordCheck == passUser)
+    if (passwordCheck == pass_now)
     {
         return true;
     }
@@ -305,11 +347,12 @@ bool konfirmasiPassword(int kesempatan)
         return konfirmasiPassword(kesempatan - 1);
     }
 }
+
 // fungsi menambahkan saldo
 void tambahSaldo()
 {
+    string username, pass;
     char pilih;
-    string namaUser, passUser; 
     int pilihTopUp, nominal, kesempatan = 3;
     // menampilkan menu top up
     system("cls");
@@ -336,20 +379,31 @@ void tambahSaldo()
             system("cls");
             cout << setfill('=') << setw(40) << "=" << endl;
             cout << setfill(' ') << setw(12) << " " << "TOPUP SUCCESSED" << endl;
-            nominal = topUp[pilihTopUp - 1];
-            saldo += nominal;
-            transaksi[j].riwayat = 0;
-            transaksi[j].keuangan = nominal;
+            if (indeks != -1)
+            {
+                nominal = topUp[pilihTopUp - 1];
+                akun[indeks].saldo += nominal;
 
-            j++;
-            ofstream file("dataAcc.txt", ios::app);
+                transaksi[j].riwayat = 0;
+                transaksi[j].keuangan = nominal;
+                j++;
+            }
+            ofstream file("Acc.txt"); // Buka file dalam mode tulis (overwrite, BUKAN append)
             if (file.is_open())
             {
-                file << namaUser << " " << passUser << " " << account[i].saldo << endl;
+                for (int k = 0; k < banyak_acc; ++k)
+                {
+                    file << akun[k].username << " " << akun[k].password << " " << akun[k].saldo << endl;
+                }
                 file.close();
+                cout << "Nominal        : " << nominal << endl;
+                cout << "Saldo saat ini : " << akun[indeks].saldo << endl; // Tampilkan saldo yang benar
             }
-            cout << "Nominal        : " << nominal << endl;
-            cout << "Saldo saat ini : " << saldo << endl;
+            else
+            {
+                cout << "Error: Gagal membuka file Acc.txt untuk menyimpan perubahan saldo." << endl;
+                akun[indeks].saldo -= nominal;
+            }
         }
     }
     else
@@ -382,8 +436,43 @@ void tambahSaldo()
     system("pause");
 }
 // fungsi menu pembelian
+string gantiUnderscore(string kata)
+{
+    for (int i = 0; i < kata.length(); i++)
+    {
+        if (kata[i] == '_')
+        {
+            kata[i] = ' ';
+        }
+    }
+    return kata;
+}
+
+
+void menuData(string namaFile)
+{
+    int no, harga;
+    string nama;
+    ifstream file(namaFile);
+    if (file.is_open())
+    {
+        while (file >> no >> nama >> harga)
+        {
+            cout << no << ". " << setfill(' ')
+                 << setw(28) << left << gantiUnderscore(nama) << "Rp"
+                 << setw(6) << right << harga << endl;
+        }
+    }
+}
+
+
 void buy()
 {
+    string namaFile1 = "kantin1.txt";
+    string namaFile2 = "kantin2.txt";
+    string namaFile3 = "kantin3.txt";
+    string namaFile4 = "kantin4.txt";
+    string namaFile5 = "kantin5.txt";
     int qty;
     char ulang;
     // tampilan daftar kantin
@@ -405,31 +494,21 @@ void buy()
     switch (pilihKantin)
     {
     case 1:
-        for (int i = 0; i < 8; i++)
-            cout << i + 1 << ". " << setfill(' ') << setw(28) << left << kantin1[i].namaMkn << "Rp." << setfill(' ') << setw(6) << right << kantin1[i].harga << endl;
-
+        menuData(namaFile1);
         break;
     case 2:
-        for (int i = 0; i < 5; i++)
-            cout << i + 1 << ". " << setfill(' ') << setw(28) << left << kantin2[i].namaMkn << "Rp." << setfill(' ') << setw(6) << right << kantin2[i].harga << endl;
-
+        menuData(namaFile2);
         break;
     case 3:
-        for (int i = 0; i < 7; i++)
-            cout << i + 1 << ". " << setfill(' ') << setw(28) << left << kantin3[i].namaMkn << "Rp." << setfill(' ') << setw(6) << right << kantin3[i].harga << endl;
-
+        menuData(namaFile3);
         break;
 
     case 4:
-        for (int i = 0; i < 6; i++)
-            cout << i + 1 << ". " << setfill(' ') << setw(28) << left << kantin4[i].namaMkn << "Rp." << setfill(' ') << setw(6) << right << kantin4[i].harga << endl;
-
+        menuData(namaFile4);
         break;
 
     case 5:
-        for (int i = 0; i < 8; i++)
-            cout << i + 1 << ". " << setfill(' ') << setw(28) << left << kantin5[i].namaMkn << "Rp." << setfill(' ') << setw(6) << right << kantin5[i].harga << endl;
-
+        menuData(namaFile5);
         break;
 
     default:
@@ -548,7 +627,6 @@ int bayar(int a, int b)
     profile();
 }
 // menu history top up dan pembayaran user
-
 void detailHistory()
 {
     int a, b;
@@ -558,8 +636,8 @@ void detailHistory()
     cout << setfill(' ') << setw(11) << " " << "HISTORI TRANSAKSI\n";
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "1. Seluruh History \n";
-    cout << "2. History Nominal (Terkecil ke Terbesar)\n";
-    cout << "3. History Nominal (Terbesar ke Terkecil)\n";
+    cout << "2. History Nominal (Terkecil)\n";
+    cout << "3. History Nominal (Terbesar)\n";
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << "Pilih urutan: ";
     cin >> pilihHistory;
@@ -569,86 +647,43 @@ void detailHistory()
     {
     case '1':
         if (j == 0)
-            cout << endl << "   Anda belum melakukan transaksi" << endl << endl;
+            cout << endl
+                 << "   Anda belum melakukan transaksi" << endl
+                 << endl;
         for (int k = 0; k < j; k++)
         {
             if (transaksi[k].riwayat == 0)
-                cout << "|" << endl << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
+                cout << "|" << endl
+                     << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
             if (transaksi[k].riwayat == 1)
-                cout << "|" << endl << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
+                cout << "|" << endl
+                     << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
         }
         break;
     case '2':
-        // Sort in ascending order
-        quicksort(transaksi, 0, j - 1);
+        a = 0;
+        b = j;
+        sortingAsc(a, b);
         for (int k = 0; k < j; k++)
         {
             if (transaksi[k].riwayat == 0)
-                cout << "|" << endl << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
+                cout << "|" << endl
+                     << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
             if (transaksi[k].riwayat == 1)
-                cout << "|" << endl << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
+                cout << "|" << endl
+                     << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
         }
         break;
-    case '3':
-        // Sort in descending order
-        quicksort(transaksi, 0, j - 1);
-        for (int k = j - 1; k >= 0; k--)
-        {
-            if (transaksi[k].riwayat == 0)
-                cout << "|" << endl << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
-            if (transaksi[k].riwayat == 1)
-                cout << "|" << endl << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
-        }
-        break;
+
     default:
         cout << "Pilihan tidak tersedia" << endl;
         break;
     }
 
-    // Save history to file
-    saveHistoryToFile();
-
     cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
     profile();
-}
-
-// Quick Sort implementation for history array sorting by keuangan ascending
-void quicksort(history arr[], int low, int high) {
-    if (low < high) {
-        int pivotIndex = partition(arr, low, high);
-        quicksort(arr, low, pivotIndex - 1);
-        quicksort(arr, pivotIndex + 1, high);
-    }
-}
-
-int partition(history arr[], int low, int high) {
-    int pivot = arr[high].keuangan; // choose pivot from the rightmost element
-    int i = low - 1;
-
-    for (int j = low; j < high; ++j) {
-        if (arr[j].keuangan <= pivot) {
-            ++i;
-            swap(arr[i], arr[j]);
-        }
-    }
-
-    swap(arr[i + 1], arr[high]);
-    return i + 1;
-}
-
-// Function to save history to file
-void saveHistoryToFile() {
-    ofstream file("historyAcc.txt", ios::app);
-    if (file.is_open()) {
-        for (int k = 0; k < j; k++) {
-            // Write in format: username riwayat keuangan
-            file << namaUser << " " << transaksi[k].riwayat << " " << transaksi[k].keuangan << endl;
-        }
-        file.close();
-    }
-}
-
+};
 // urut kecil ke besar
 void sortingAsc(int first, int last)
 {
@@ -679,6 +714,4 @@ void sortingAsc(int first, int last)
         sortingAsc(first, high);
     if (low < last)
         sortingAsc(low, last);
-} 
-
-
+}

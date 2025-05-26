@@ -1,0 +1,8 @@
+1 Indomie_Goreng_Kornet 10000
+2 Indomie_Rebus_Kornet 10000
+3 Indomie_Goreng_Kornet_Telur 13000
+4 Indomie_Rebus_Kornet 13000
+5 Indomie_Goreng_Kornet_Sosis 9000
+6 Indomie_Rebus_Kornet 9000
+7 Es_Jeruk 3000
+8 Es_Nutrisari 4000
