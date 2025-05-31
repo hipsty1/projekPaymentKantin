@@ -26,7 +26,7 @@ void signup()
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(17) << " " << "SIGN UP" << endl;
     cout << setfill('=') << setw(40) << "=" << endl;
-
+    
     while (attempts < 3 && !success)
     {
         cout << "Masukkan username: ";
@@ -49,15 +49,17 @@ void signup()
             }
             infile.close();
         }
-
+        
         if (username_taken)
         {
             attempts++;
             cout << "Username sudah dipakai! Percobaan ke-" << attempts << " dari 3." << endl
-                 << endl;
+            << endl;
             if (attempts == 3)
             {
+                cout << setfill('=') << setw(40) << "=" << endl;
                 cout << "Gagal membuat akun setelah 3 kali percobaan." << endl;
+                system("pause");
                 return;
             }
         }

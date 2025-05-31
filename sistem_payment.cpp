@@ -37,8 +37,9 @@ menu kantin5[8] = {{"Indomie Goreng Kornet", 10000}, {"Indomie rebus Kornet", 10
 // data menu history
 struct history
 {
-    bool riwayat; // 0 topup, 1 transaksi
-    int keuangan; // nominalnya
+    string username; // nama
+    bool kondisi; // 0 topup, 1 transaksi
+    int jumlah;   // nominalnya
 };
 int j = 0;
 int batas = 0;
@@ -63,15 +64,16 @@ void profile();
 void tambahSaldo();
 void buy();
 void detailHistory();
-int bayar(int a, int b);
-int totalHarga(int a, int b);
+int bayar();
+int totalHarga(int pilihMenu, int qty);
 bool konfirmasiPassword();
 void sortingAsc(int first, int last);
 void banyakAcc();
 void lowerCase(string &kata);
+void simpanHistory(string nama, bool kondisi, int jumlah);
 int banyak_acc = 0;
 int indeks = 0;
-
+//==================================================================================
 void banyakAcc()
 {
     string username, pass;
@@ -100,6 +102,7 @@ int main()
     homePage();
     return 0;
 }
+//==================================================================================
 
 void homePage()
 {
@@ -134,30 +137,6 @@ void homePage()
         homePage();
     }
 }
-
-// bool checkAcc(string newUsername)
-// {
-//     bool check = false;
-//     ifstream file("Acc.txt");
-//     if (file.is_open())
-//     {
-//         while (file >> nama_now >> pass_now)
-//         {
-//             if (nama_now == newUsername)
-//             {
-//                 check = true;
-//             }
-//         }
-//     }
-//     else
-//     {
-//         check = false;
-//     }
-//     return check;
-// }
-// void inputData(string username, string password, int saldo){
-
-// }
 
 void signup()
 {
@@ -271,6 +250,8 @@ void signin()
         homePage(); // Meminta user kembali ke homepage jika gagal
     }
 }
+//==================================================================================
+
 // menu profile user
 void profile()
 {
@@ -304,7 +285,7 @@ void profile()
         detailHistory();
         break;
     case '4':
-        exit(0);
+        homePage();
         break;
     default:
         system("cls");
@@ -316,6 +297,8 @@ void profile()
         profile();
     }
 }
+//==================================================================================
+
 // fungsi konfirmasi password ketika membeli
 bool konfirmasiPassword(int kesempatan)
 {
@@ -383,10 +366,11 @@ void tambahSaldo()
             {
                 nominal = topUp[pilihTopUp - 1];
                 akun[indeks].saldo += nominal;
+                simpanHistory(akun[indeks].username, 0, akun[indeks].saldo);
 
-                transaksi[j].riwayat = 0;
-                transaksi[j].keuangan = nominal;
-                j++;
+                // transaksi[j].kondisi = 0;
+                // transaksi[j].jumlah = nominal;
+                // j++;
             }
             ofstream file("Acc.txt"); // Buka file dalam mode tulis (overwrite, BUKAN append)
             if (file.is_open())
@@ -435,6 +419,8 @@ void tambahSaldo()
     cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
 }
+//==================================================================================
+
 // fungsi menu pembelian
 string gantiUnderscore(string kata)
 {
@@ -447,7 +433,6 @@ string gantiUnderscore(string kata)
     }
     return kata;
 }
-
 
 void menuData(string namaFile)
 {
@@ -465,7 +450,6 @@ void menuData(string namaFile)
     }
 }
 
-
 void buy()
 {
     string namaFile1 = "kantin1.txt";
@@ -473,7 +457,7 @@ void buy()
     string namaFile3 = "kantin3.txt";
     string namaFile4 = "kantin4.txt";
     string namaFile5 = "kantin5.txt";
-    int qty;
+    int qty, total;
     char ulang;
     // tampilan daftar kantin
     system("cls");
@@ -538,41 +522,41 @@ void buy()
     }
     else
     {
-        bayar(pilihmenu, qty);
+        bayar();
     }
 }
 // fungsi menghitung jumlah harga yang harus dibayar
-int totalHarga(int a, int b)
+int totalHarga(int pilihMenu, int qty)
 {
     // operasi tiap tiap kantin
     switch (pilihKantin)
     {
     case 1:
-        harga = kantin1[a - 1].harga * b;
+        harga = kantin1[pilihMenu - 1].harga * qty;
         total += harga;
-        cout << "Subtotal    : " << harga << endl;
+        cout << "Sutotal    : " << harga << endl;
         cout << "Total harga : " << total << endl;
         break;
     case 2:
-        harga = kantin2[a - 1].harga * b;
+        harga = kantin2[pilihMenu - 1].harga * qty;
         total += harga;
         cout << "Subtotal    : " << harga << endl;
         cout << "Total harga : " << total << endl;
         break;
     case 3:
-        harga = kantin3[a - 1].harga * b;
+        harga = kantin3[pilihMenu - 1].harga * qty;
         total += harga;
         cout << "Subtotal    : " << harga << endl;
         cout << "Total harga : " << total << endl;
         break;
     case 4:
-        harga = kantin4[a - 1].harga * b;
+        harga = kantin4[pilihMenu - 1].harga * qty;
         total += harga;
         cout << "Subtotal    : " << harga << endl;
         cout << "Total harga : " << total << endl;
         break;
     case 5:
-        harga = kantin5[a - 1].harga * b;
+        harga = kantin5[pilihMenu - 1].harga * qty;
         total += harga;
         cout << "Subtotal    : " << harga << endl;
         cout << "Total harga : " << total << endl;
@@ -581,8 +565,9 @@ int totalHarga(int a, int b)
     return total;
 }
 // fungsi untuk pembayaran user
-int bayar(int a, int b)
+int bayar()
 {
+    saldo = akun[indeks].saldo;
     // cek sisa saldo dan harga yang harus dibayar user
     if (saldo < total)
     {
@@ -613,9 +598,10 @@ int bayar(int a, int b)
             cout << "Total harga : " << total << endl;
             cout << "Sisa Saldo  : " << saldo << endl
                  << endl;
-            transaksi[j].riwayat = 1;
-            transaksi[j].keuangan = total;
-            j++;
+            simpanHistory(akun[indeks].username, 1, total);
+            // transaksi[j].kondisi = 1;
+            // transaksi[j].jumlah = total;
+            // j++;
             cout << setfill(' ') << setw(5) << " " << "Terimakasih telah berbelanja" << endl;
             cout << setfill('=') << setw(40) << "=" << endl;
             system("pause");
@@ -626,11 +612,91 @@ int bayar(int a, int b)
     harga = 0;
     profile();
 }
-// menu history top up dan pembayaran user
-void detailHistory()
+
+//==================================================================================
+
+void simpanHistory(string nama, bool kondisi, int jumlah)
 {
-    int a, b;
+    ofstream file("historyAcc.txt", ios::app);
+    if (file.is_open())
+    {
+        file << nama_now << " " << kondisi << " " << jumlah << endl;
+        file.close();
+    }
+    else
+    {
+        cout << "File tidak berguna " << endl;
+    }
+}
+
+// void printHistory(strin arr[], )
+// {
+// }
+
+
+// Deklarasi struct dan variabel global
+
+
+
+
+void profile(); // Deklarasi fungsi profile
+
+void banyakHistory(int mode, int &size) {
+    string username;
+    int jumlah;
+    bool kondisi;
+    ifstream file("historyAcc.txt");
+    
+    if (file.is_open()) {
+        size = 0;
+        while (file >> username >> kondisi >> jumlah && size < 1000) {
+            if (username == akun[indeks].username) {
+                if (mode == 1) { // Mode tampil langsung
+                    if (kondisi == 0)
+                        cout << "|" << endl << "o  \033[32mPemasukan          +" << jumlah << "\033[0m" << endl;
+                    else
+                        cout << "|" << endl << "o  \033[31mPengeluaran        -" << jumlah << "\033[0m" << endl;
+                } 
+                else if (mode == 2) { // Mode kumpulkan data
+                    transaksi[size].username = username;
+                    transaksi[size].jumlah = jumlah;
+                    transaksi[size].kondisi = kondisi;
+                    size++;
+                }
+            }
+        }
+        file.close();
+    }
+}
+
+// Fungsi partition untuk array of struct Transaksi
+int partition(history arr[], int low, int high) {
+    int pivot = arr[high].jumlah;
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j].jumlah < pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+// Quicksort untuk array of struct history
+void quickSort(history arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void detailHistory() {
+    int size = 0;
     char pilihHistory;
+    
     system("cls");
     cout << setfill('=') << setw(40) << "=" << endl;
     cout << setfill(' ') << setw(11) << " " << "HISTORI TRANSAKSI\n";
@@ -643,35 +709,38 @@ void detailHistory()
     cin >> pilihHistory;
     cout << setfill('=') << setw(40) << "=" << endl;
 
-    switch (pilihHistory)
-    {
+    switch (pilihHistory) {
     case '1':
-        if (j == 0)
-            cout << endl
-                 << "   Anda belum melakukan transaksi" << endl
-                 << endl;
-        for (int k = 0; k < j; k++)
-        {
-            if (transaksi[k].riwayat == 0)
-                cout << "|" << endl
-                     << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
-            if (transaksi[k].riwayat == 1)
-                cout << "|" << endl
-                     << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
+        banyakHistory(1, size);
+        break;
+
+    case '2':
+        banyakHistory(2, size);
+        if (size > 0) {
+            quickSort(transaksi, 0, size - 1);
+            
+            // Cetak hasil sorting (terkecil pertama)
+            for (int i = 0; i < size; i++) {
+                if (transaksi[i].kondisi == 0)
+                    cout << "|" << endl << "o  \033[32mPemasukan          +" << transaksi[i].jumlah << "\033[0m" << endl;
+                else
+                    cout << "|" << endl << "o  \033[31mPengeluaran        -" << transaksi[i].jumlah << "\033[0m" << endl;
+            }
         }
         break;
-    case '2':
-        a = 0;
-        b = j;
-        sortingAsc(a, b);
-        for (int k = 0; k < j; k++)
-        {
-            if (transaksi[k].riwayat == 0)
-                cout << "|" << endl
-                     << "o  \033[32mPemasukan          +" << transaksi[k].keuangan << "\033[0m" << endl;
-            if (transaksi[k].riwayat == 1)
-                cout << "|" << endl
-                     << "o  \033[31mPengeluaran        -" << transaksi[k].keuangan << "\033[0m" << endl;
+
+    case '3':
+        banyakHistory(2, size);
+        if (size > 0) {
+            quickSort(transaksi, 0, size - 1);
+            
+            // Cetak hasil sorting (terbesar pertama)
+            for (int i = size - 1; i >= 0; i--) {
+                if (transaksi[i].kondisi == 0)
+                    cout << "|" << endl << "o  \033[32mPemasukan          +" << transaksi[i].jumlah << "\033[0m" << endl;
+                else
+                    cout << "|" << endl << "o  \033[31mPengeluaran        -" << transaksi[i].jumlah << "\033[0m" << endl;
+            }
         }
         break;
 
@@ -683,35 +752,190 @@ void detailHistory()
     cout << setfill('=') << setw(40) << "=" << endl;
     system("pause");
     profile();
-};
-// urut kecil ke besar
-void sortingAsc(int first, int last)
-{
-
-    int low, high, mid, temp;
-    low = first;
-    high = last;
-    mid = transaksi[(first + last) / 2].keuangan;
-
-    do
-    {
-        while (transaksi[low].keuangan < mid)
-            low++;
-        while (transaksi[high].keuangan > mid)
-            high--;
-
-        if (low <= high)
-        {
-            temp = transaksi[low].keuangan;
-            transaksi[low].keuangan = transaksi[high].keuangan;
-            transaksi[high].keuangan = temp;
-            low++;
-            high--;
-        }
-    } while (low <= high);
-
-    if (first < high)
-        sortingAsc(first, high);
-    if (low < last)
-        sortingAsc(low, last);
 }
+
+// Tambahkan fungsi profile() dan main() sesuai kebutuhan
+
+
+
+
+
+// void banyakHistory(int mode, int &size, int riwayat[])
+// {
+//     string username;
+//     int jumlah;
+//     bool kondisi;
+//     ifstream file("historyAcc.txt");
+//     if (file.is_open())
+//     {
+//         size = 0;
+//         while (file >> username >> kondisi >> jumlah)
+//         {
+//             if (username == akun[indeks].username && mode == 1)
+//             {
+//                 if (kondisi == 0)
+//                     cout << "|" << endl
+//                          << "o  \033[32mPemasukan          +" << jumlah << "\033[0m" << endl;
+//                 if (kondisi == 1)
+//                     cout << "|" << endl
+//                          << "o  \033[31mPengeluaran        -" << jumlah << "\033[0m" << endl;
+//             }
+//             if (username == akun[indeks].username && mode == 2)
+//             {
+//                 transaksi[indeks].username = username;
+//                 transaksi[indeks].jumlah = jumlah;
+//                 transaksi[indeks].kondisi = kondisi;
+//                 riwayat[size] = jumlah;
+//                 size++;
+//             }
+//         }
+//     }
+// }
+// int partition(int arr[], int low, int high)
+// {
+//     int pivot = arr[high]; // Memilih elemen terakhir sebagai pivot
+//     int i = (low - 1);     // Indeks elemen yang lebih kecil
+
+//     for (int j = low; j <= high - 1; j++)
+//     {
+//         // Jika elemen saat ini lebih kecil dari pivot
+//         if (arr[j] < pivot)
+//         {
+//             i++; // Increment indeks elemen yang lebih kecil
+//             int temp = arr[i];
+//             arr[i] = arr[j];
+//             arr[j] = temp;
+//         }
+//     }
+//     int temp = arr[i + 1];
+//     arr[i + 1] = arr[high];
+//     arr[high] = temp;
+//     return (i + 1);
+// }
+
+// // Fungsi utama Quicksort
+// void quickSort(int arr[], int low, int high)
+// {
+//     if (low < high)
+//     {
+//         // pi adalah indeks partisi, arr[pi] sekarang berada di tempat yang benar
+//         int pi = partition(arr, low, high);
+
+//         // Urutkan elemen secara rekursif sebelum dan sesudah partisi
+//         quickSort(arr, low, pi - 1);
+//         quickSort(arr, pi + 1, high);
+//     }
+// }
+
+// // Fungsi untuk mencetak array
+// void printArray(int arr[], int size)
+// {
+//     bool kondisi;
+//     for (int i = 0; i < size; i++)
+//     {
+//         if (kondisi == 0)
+//             cout << "|" << endl
+//                  << "o  \033[32mPemasukan          +" << arr[i] << "\033[0m" << endl;
+//         if (kondisi == 1)
+//             cout << "|" << endl
+//                  << "o  \033[31mPengeluaran        -" << arr[i] << "\033[0m" << endl;
+//     }
+// }
+
+// // Contoh penggunaan
+
+// int riwayat[100];
+
+// // menu history top up dan pembayaran user
+// void detailHistory()
+// {
+//     int a, b;
+//     char pilihHistory;
+//     int size;
+//     system("cls");
+//     cout << setfill('=') << setw(40) << "=" << endl;
+//     cout << setfill(' ') << setw(11) << " " << "HISTORI TRANSAKSI\n";
+//     cout << setfill('=') << setw(40) << "=" << endl;
+//     cout << "1. Seluruh History \n";
+//     cout << "2. History Nominal (Terkecil)\n";
+//     cout << "3. History Nominal (Terbesar)\n";
+//     cout << setfill('=') << setw(40) << "=" << endl;
+//     cout << "Pilih urutan: ";
+//     cin >> pilihHistory;
+//     cout << setfill('=') << setw(40) << "=" << endl;
+
+//     switch (pilihHistory)
+//     {
+//     case '1':
+//         banyakHistory(1, size, riwayat);
+//         break;
+
+//     case '2':
+//         a = 0;
+//         b = j;
+
+//         // buat arr yang khusus untuk semuanya, yg nanti jumlahanya di tampung lagi
+//         // tampung jumlah pake arr riwayat
+//         banyakHistory(2, size, riwayat);
+//         cout << size;
+//         int n;
+//         n = size;
+//         quickSort(riwayat, 0, n - 1);
+
+//         cout << "Array setelah diurutkan: \n";
+        
+//         for (int i = 0; i < size; i++)
+//         {
+//             if (transaksi[i].kondisi == 0)
+//                 cout << "|" << endl
+//                      << "o  \033[32mPemasukan          +" << transaksi[i].jumlah << "\033[0m" << endl;
+//             if (transaksi[i].kondisi == 1)
+//                 cout << "|" << endl
+//                      << "o  \033[31mPengeluaran        -" << transaksi[i].jumlah << "\033[0m" << endl;
+//         }
+
+//         // banyakHistory(1, size, riwayat);
+//         printArray(riwayat, size);
+//         break;
+
+//     default:
+//         cout << "Pilihan tidak tersedia" << endl;
+//         break;
+//     }
+
+//     cout << setfill('=') << setw(40) << "=" << endl;
+//     system("pause");
+//     profile();
+// }
+
+// urut kecil ke besar
+
+// void sortingAsc(int first, int last)
+// {
+//     int low, high, mid, temp;
+//     low = first;
+//     high = last;
+//     mid = transaksi[(first + last) / 2].keuangan;
+//     do
+//     {
+//         while (transaksi[low].keuangan < mid)
+//             low++;
+//         while (transaksi[high].keuangan > mid)
+//             high--;
+//         if (low <= high)
+//         {
+//             temp = transaksi[low].keuangan;
+//             transaksi[low].keuangan = transaksi[high].keuangan;
+//             transaksi[high].keuangan = temp;
+//             low++;
+//             high--;
+//         }
+//     } while (low <= high);
+//     if (first < high)
+//         sortingAsc(first, high);
+//     if (low < last)
+//         sortingAsc(low, last);
+// }
+
+// Fungsi untuk mempartisi array
+// Perhatikan bagaimana kita meneruskan ukuran array secara eksplisit
